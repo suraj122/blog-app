@@ -1,13 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { loginURL } from "../utils/constant";
 import validate from "../utils/validate";
+import { withRouter } from "../utils/withRouter";
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
+      email: "acsuraj123@gmail.com",
+      password: "acsuraj123",
       errors: {
         email: "",
         password: "",
@@ -26,6 +28,39 @@ class Login extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+    const { navigate } = this.props;
+    const { email, password } = this.state;
+    fetch(loginURL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user: { email, password } }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          res.json().then(({ errors }) => {
+            return Promise.reject(errors);
+          });
+          throw new Error("Login is not successful");
+        }
+        return res.json();
+      })
+      .then(({ user }) => {
+        this.props.updateUser(user);
+        this.setState({ email: "", password: "" });
+        navigate("/");
+      })
+      .catch((error) =>
+        this.setState((prevState) => {
+          return {
+            ...prevState,
+            errors: {
+              email: "Email or Password is invalid",
+            },
+          };
+        })
+      );
   };
 
   render() {
@@ -38,6 +73,7 @@ class Login extends React.Component {
             <Link to="/signup">Need an account?</Link>
           </h6>
         </header>
+
         <form
           className="mt-8 text-center"
           action=""
@@ -75,4 +111,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);

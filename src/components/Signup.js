@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { signupURL } from "../utils/constant";
 import validate from "../utils/validate";
+import { withRouter } from "../utils/withRouter";
 
 class Signup extends React.Component {
   constructor(props) {
@@ -28,6 +30,29 @@ class Signup extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+    const { username, email, password } = this.state;
+    const { navigate } = this.props;
+    fetch(signupURL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user: { username, email, password } }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          return res.json().then(({ errors }) => {
+            return Promise.reject(errors);
+          });
+        }
+        return res.json();
+      })
+      .then(({ user }) => {
+        this.props.updateUser(user);
+        this.setState({ username: "", email: "", password: "" });
+        navigate("/");
+      })
+      .catch((errors) => this.setState({ errors }));
   };
 
   render() {
@@ -82,4 +107,4 @@ class Signup extends React.Component {
   }
 }
 
-export default Signup;
+export default withRouter(Signup);

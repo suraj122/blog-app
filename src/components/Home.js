@@ -65,7 +65,6 @@ class Home extends React.Component {
 
   render() {
     const { articles, articlesCount, activeIndex } = this.state;
-    console.log(articles);
     return (
       <>
         <Banner />

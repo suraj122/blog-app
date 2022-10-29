@@ -2,7 +2,7 @@ function validate(name, value, errors) {
   switch (name) {
     case "username":
       let usernameError =
-        value.length < 7 ? "Username should be at-least 6 characters long" : "";
+        value.length < 6 ? "Username should be at-least 6 characters long" : "";
       errors.username = usernameError;
       break;
     case "email":
