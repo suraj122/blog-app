@@ -11,6 +11,7 @@ import Settings from "./components/Settings";
 import Signup from "./components/Signup";
 import SinglePost from "./components/SinglePost";
 import { localStorageKey, userVerifying } from "./utils/constant";
+import { withRouter } from "./utils/withRouter";
 
 class App extends React.Component {
   constructor(props) {
@@ -46,6 +47,16 @@ class App extends React.Component {
     }
   }
 
+  handleLogout = () => {
+    const { navigate } = this.props;
+    this.setState({
+      isLoggedin: false,
+      user: null,
+    });
+    navigate("/");
+    localStorage.clear();
+  };
+
   updateUser = (user) => {
     this.setState({
       isLoggedin: true,
@@ -63,24 +74,30 @@ class App extends React.Component {
       <div className="App">
         <Navbar isLoggedin={this.state.isLoggedin} user={this.state.user} />
         {this.state.isLoggedin ? (
-          <AuthApp />
+          <AuthApp logout={this.handleLogout} user={this.state.user} />
         ) : (
-          <UnAuthApp updateUser={this.updateUser} />
+          <UnAuthApp updateUser={this.updateUser} user={this.state.user} />
         )}
       </div>
     );
   }
 }
 
-function AuthApp() {
+function AuthApp(props) {
   return (
     <>
       <Routes exact>
         <Route path="/" element={<Home />} />
-        <Route path="/articles/:slug" element={<SinglePost />} />
-        <Route path="/new-post" element={<NewPost />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/articles/:slug"
+          element={<SinglePost user={props.user} />}
+        />
+        <Route path="/new-post" element={<NewPost user={props.user} />} />
+        <Route
+          path="/settings"
+          element={<Settings logout={props.logout} user={props.user} />}
+        />
+        <Route path="/:profile" element={<Profile user={props.user} />} />
         <Route path="*" element={<Notfound />} />
       </Routes>
     </>
@@ -92,7 +109,10 @@ function UnAuthApp(props) {
     <>
       <Routes exact>
         <Route path="/" element={<Home />} />
-        <Route path="/articles/:slug" element={<SinglePost />} />
+        <Route
+          path="/articles/:slug"
+          element={<SinglePost user={props.user} />}
+        />
         <Route
           path="/signup"
           element={<Signup updateUser={props.updateUser} />}
@@ -107,4 +127,4 @@ function UnAuthApp(props) {
   );
 }
 
-export default App;
+export default withRouter(App);

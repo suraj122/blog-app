@@ -7,7 +7,13 @@ function Navbar(props) {
         <Link className="text-2xl font-bold text-green-600" to="/">
           <h2>Conduit</h2>
         </Link>
-        <div>{props.isLoggedin ? <AuthNavbar /> : <NonAuthNavbar />}</div>
+        <div>
+          {props.isLoggedin ? (
+            <AuthNavbar user={props.user} />
+          ) : (
+            <NonAuthNavbar />
+          )}
+        </div>
       </nav>
     </header>
   );
@@ -48,7 +54,7 @@ function NonAuthNavbar() {
   );
 }
 
-function AuthNavbar() {
+function AuthNavbar(props) {
   return (
     <ul className="flex items-center">
       <li>
@@ -83,7 +89,7 @@ function AuthNavbar() {
         <NavLink
           activeclassname="active"
           className="text-xl text-gray-500 hover:text-green-600"
-          to="/profile"
+          to={`/${props.user.username}`}
         >
           Profile
         </NavLink>

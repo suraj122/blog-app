@@ -44,7 +44,7 @@ class SinglePost extends React.Component {
                   <cite className="block not-italic text-white">
                     {article.author.username}
                   </cite>
-                  <time datetime="">{article.createdAt}</time>
+                  <time>{article.createdAt}</time>
                 </div>
               </div>
             </div>
@@ -55,27 +55,34 @@ class SinglePost extends React.Component {
             </p>
             <div className="mt-4">
               {article.tagList.map((tag) => (
-                <span className="border rounded-xl px-3 py-1 text-sm text-gray-500">
+                <span
+                  key={tag}
+                  className="border rounded-xl px-3 py-1 text-sm text-gray-500 inline-block mr-2"
+                >
                   {tag}
                 </span>
               ))}
             </div>
           </section>
         </article>
-        <section className="mt-12 border-t container mx-auto py-12">
-          <div className="max-w-xl mx-auto">
-            <p>
-              <Link className="text-green-500" to="/signin">
-                Sign in
-              </Link>{" "}
-              or{" "}
-              <Link className="text-green-500" to="/signup">
-                Sign up{" "}
-              </Link>
-              to add comments on this article
-            </p>
-          </div>
-        </section>
+        {this.props.user === null ? (
+          <section className="mt-12 border-t container mx-auto py-12">
+            <div className="max-w-xl mx-auto">
+              <p>
+                <Link className="text-green-500" to="/signin">
+                  Sign in
+                </Link>{" "}
+                or{" "}
+                <Link className="text-green-500" to="/signup">
+                  Sign up{" "}
+                </Link>
+                to add comments on this article
+              </p>
+            </div>
+          </section>
+        ) : (
+          ""
+        )}
       </>
     );
   }

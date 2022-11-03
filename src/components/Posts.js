@@ -1,18 +1,20 @@
 import React from "react";
 
-import Loader from "./Loader";
 import Post from "./Post";
 
 function Posts(props) {
   const { articles } = props;
-  if (!articles) {
-    return <Loader />;
-  }
   return (
     <>
-      {articles.map((article) => (
-        <Post key={article.slug} {...article} />
-      ))}
+      {articles === null ? (
+        <h1 className="mt-8">Loading...</h1>
+      ) : articles.length === 0 ? (
+        <h1 className="py-8 border-t-2 text-3xl font-bold">
+          No articles found
+        </h1>
+      ) : (
+        articles.map((article) => <Post key={article.slug} {...article} />)
+      )}
     </>
   );
 }
