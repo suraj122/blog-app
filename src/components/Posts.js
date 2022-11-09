@@ -13,7 +13,14 @@ function Posts(props) {
           No articles found
         </h1>
       ) : (
-        articles.map((article) => <Post key={article.slug} {...article} />)
+        articles.map((article) => (
+          <Post
+            key={article.slug}
+            {...article}
+            user={props.user}
+            isLoggedin={props.isLoggedin}
+          />
+        ))
       )}
     </>
   );

@@ -75,7 +75,11 @@ class Home extends React.Component {
                 activeTag={this.state.activeTag}
                 removeTag={this.removeTag}
               />
-              <Posts articles={articles} />
+              <Posts
+                articles={articles}
+                user={this.props.user}
+                isLoggedin={this.props.isLoggedin}
+              />
               <Pagination
                 count={articlesCount}
                 activeIndex={activeIndex}

@@ -30,7 +30,7 @@ class Tags extends React.Component {
         <ul className="p-4 bg-green-100 rounded-md">
           {tags.map((tag) => (
             <li
-              className="inline-block bg-gray-500 text-white rounded-lg m-1 p-1 text-xs"
+              className="inline-block bg-gray-500 text-white rounded-lg m-1 p-1 text-xs cursor-pointer"
               key={tag}
               onClick={() => this.props.activeTag(tag)}
             >

@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import EditPost from "./components/EditPost";
 import Home from "./components/Home";
 import Loader from "./components/Loader";
 import Login from "./components/Login";
@@ -74,9 +75,17 @@ class App extends React.Component {
       <div className="App">
         <Navbar isLoggedin={this.state.isLoggedin} user={this.state.user} />
         {this.state.isLoggedin ? (
-          <AuthApp logout={this.handleLogout} user={this.state.user} />
+          <AuthApp
+            logout={this.handleLogout}
+            user={this.state.user}
+            isLoggedin={this.state.isLoggedin}
+          />
         ) : (
-          <UnAuthApp updateUser={this.updateUser} user={this.state.user} />
+          <UnAuthApp
+            updateUser={this.updateUser}
+            user={this.state.user}
+            isLoggedin={this.state.isLoggedin}
+          />
         )}
       </div>
     );
@@ -87,12 +96,16 @@ function AuthApp(props) {
   return (
     <>
       <Routes exact>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={<Home user={props.user} isLoggedin={props.isLoggedin} />}
+        />
         <Route
           path="/articles/:slug"
           element={<SinglePost user={props.user} />}
         />
         <Route path="/new-post" element={<NewPost user={props.user} />} />
+        <Route path="/editor/:slug" element={<EditPost user={props.user} />} />
         <Route
           path="/settings"
           element={<Settings logout={props.logout} user={props.user} />}
@@ -108,7 +121,10 @@ function UnAuthApp(props) {
   return (
     <>
       <Routes exact>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={<Home user={props.user} isLoggedin={props.isLoggedin} />}
+        />
         <Route
           path="/articles/:slug"
           element={<SinglePost user={props.user} />}
@@ -121,6 +137,7 @@ function UnAuthApp(props) {
           path="/signin"
           element={<Login updateUser={props.updateUser} />}
         />
+        <Route path="/:profile" element={<Profile user={props.user} />} />
         <Route path="*" element={<Notfound />} />
       </Routes>
     </>
