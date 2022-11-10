@@ -30,6 +30,24 @@ class Profile extends React.Component {
     this.fetchData();
   }
 
+  handleFollowing = () => {
+    let following = this.state.user.profile.following;
+    fetch(ROOT_URL + `/profiles/${this.props.params.profile}/follow`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Token ${this.props.user.token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Cannot follow the profile");
+        }
+        return res.json();
+      })
+      .then(({ user }) => (following = !following));
+  };
+
   handleTab = (label) => {
     this.setState(
       {
@@ -70,7 +88,10 @@ class Profile extends React.Component {
             </div>
             <div className="text-right mt-4">
               {this.props.user === null ? (
-                <button className="border border-gray-700 px-3 py-1 rounded hover:bg-gray-400">
+                <button
+                  onClick={this.handleFollowing}
+                  className="border border-gray-700 px-3 py-1 rounded hover:bg-gray-400"
+                >
                   {!following ? `+ Follow ${username}` : `Unfollow ${username}`}
                 </button>
               ) : this.props.user.username === username ? (
@@ -81,7 +102,10 @@ class Profile extends React.Component {
                   Edit Profile Settings
                 </Link>
               ) : (
-                <button className="border border-gray-700 px-3 py-1 rounded hover:bg-gray-400">
+                <button
+                  onClick={this.handleFollowing}
+                  className="border border-gray-700 px-3 py-1 rounded hover:bg-gray-400"
+                >
                   {!following ? `+ Follow ${username}` : `Unfollow ${username}`}
                 </button>
               )}
